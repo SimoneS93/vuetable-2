@@ -5,6 +5,7 @@
   "main": "dist/vuetable-2.js",
   "license": "MIT",
   "author": "Rati Wannapanop <rati.wannapanop@gmail.com>",
+  "forker": "Salerno Simone",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ratiw/vuetable-2.git"
