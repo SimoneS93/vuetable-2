@@ -37,6 +37,22 @@
           </template>
         </template>
       </tr>
+      <!-- @custom -->
+      <tr>
+        <template v-for="field in tableFields">
+          <template v-if="field.visible">
+            <td>
+              <input
+                      v-if="field.filterField"
+                      :name="'column_filter[' + field.filterField + ']'"
+                      class="form-control"
+                      @keydown.enter="fireEvent('filter')"
+              />
+            </td>
+          </template>
+        </template>
+      </tr>
+      <!-- @custom/ -->
     </thead>
     <tbody v-cloak class="vuetable-body">
       <template v-for="(item, index) in tableData">
@@ -109,6 +125,19 @@
         </tr>
       </template>
     </tbody>
+    <!-- @custom -->
+    <tfoot v-if="displayFooter">
+      <tr>
+        <template v-for="field in tableFields">
+            <td v-if="field.sum">
+              <h3>
+                <span class="label bg-green" v-text="sumColumn(field.name, field.sum)"></span>
+              </h3>
+            </td>
+            <td v-else></td>
+        </template>
+      </tr>
+    </tfoot>
   </table>
 </template>
 
@@ -289,6 +318,11 @@ export default {
     }
   },
   computed: {
+      //@custom
+      displayFooter() {
+          return this.fields.filter(field => field.sum).length > 0
+      },
+
     useDetailRow () {
       if (this.tableData && this.tableData[0] && this.detailRowComponent !== '' && typeof this.tableData[0][this.trackBy] === 'undefined') {
         this.warn('You need to define unique row identifier in order for detail-row feature to work. Use `track-by` prop to define one!')
@@ -335,6 +369,16 @@ export default {
     }
   },
   methods: {
+      // @custom
+      sumColumn(column, type) {
+          const total = (this.tableData || []).reduce((total, row) => total + parseFloat(row[column].replace(/[ ,€]/g, '')), 0)
+
+          switch (type) {
+              case '€': return `${total.toFixed(2).replace(/(\d\d\d\.)/, ' $1')} €`
+              default: return total
+          }
+      },
+
     normalizeFields () {
       if (typeof(this.fields) === 'undefined') {
         this.warn('You need to provide "fields" prop.')
@@ -363,6 +407,8 @@ export default {
             dataClass: (field.dataClass === undefined) ? '' : field.dataClass,
             callback: (field.callback === undefined) ? '' : field.callback,
             visible: (field.visible === undefined) ? true : field.visible,
+            filterField: (field.filterField === undefined) ? '' : field.filterField, // @custom
+            sum: field.sum // @custom
           }
         }
         self.tableFields.push(obj)
