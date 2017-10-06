@@ -1,7 +1,14 @@
 [![npm](https://img.shields.io/npm/v/vuetable-2.svg)](https://www.npmjs.com/package/vuetable-2)
 [![npm](https://img.shields.io/npm/l/vuetable-2.svg?maxAge=2592000)]()
 
-# Vuetable-2 - data table simplify!
+# Vuetable-2 - data table simplify! with custom addons
+
+This is a fork of Vuetable-2 with custom addons:
+
+ - Global filter
+ - Column filter
+ - Column sum
+ 
 
 ### Vuetable-2 works with Vue 2.x, vuetable is for Vue 1.x
 
